@@ -1,16 +1,26 @@
-FROM webcenter/openjdk-jre:8
-MAINTAINER Sebastien LANGOUREAUX <linuxworkgroup@hotmail.com>
+FROM davidcaste/alpine-java-unlimited-jce:jdk8
+MAINTAINER del xie
 
 ENV ACTIVEMQ_CONFIG_DIR /opt/activemq/conf.tmp
 ENV ACTIVEMQ_DATA_DIR /data/activemq
 
+#默认的源地址替换
+#RUN echo 'https://mirrors.aliyun.com/alpine/v3.4/main/' >> /etc/apk/repositories
+#RUN echo 'https://mirrors.aliyun.com/alpine/v3.4/community/' >> /etc/apk/repositories
+
 # Update distro and install some packages
-RUN apt-get update && \
-    apt-get install --no-install-recommends -y python-testtools python-nose python-pip vim curl supervisor logrotate locales  && \
-    update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \
-    locale-gen en_US.UTF-8 && \
-    dpkg-reconfigure locales && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk update && \
+    apk upgrade --update && \
+    apk add --no-cache py-nose py-pip vim curl supervisor logrotate tzdata && \
+    mkdir /etc/supervisord.d && \
+    mkdir -p /var/log/supervisor
+
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
+        echo $TZ > /etc/timezone
+
+#init config supervisor
+COPY supervisord.conf /etc/supervisord.conf
 
 # Install stompy
 RUN pip install stomp.py

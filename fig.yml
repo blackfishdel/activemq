@@ -1,2 +1,2 @@
 activemq:
-  image: webcenter/activemq:5.14.3
+  image: zkpregistry.com:5043/activemq:5.15.0

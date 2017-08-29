@@ -323,9 +323,9 @@ if __name__ == '__main__':
     shutil.copytree(ACTIVEMQ_HOME + "/conf/", ACTIVEMQ_CONF);
 
     # We fix right on volume
-    os.system("chown -R activemq:activemq /data/activemq")
-    os.system("chown -R activemq:activemq " + ACTIVEMQ_CONF)
-    os.system("chown -R activemq:activemq /var/log/activemq")
+    os.system("chmod +r /data/activemq")
+    os.system("chmod +r " + ACTIVEMQ_CONF)
+    os.system("chmod +r /var/log/activemq")
 
     serviceRun = Init()
     serviceRun.setting_all()
